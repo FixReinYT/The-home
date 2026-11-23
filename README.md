@@ -9,6 +9,7 @@ The current branch contains:
 - a procedural multi-room mansion layout with foyer, salon, dining room, kitchen, library and bedroom;
 - furnished environment props including sofa, dining set, kitchen counters, cabinets, bookcases, books, bed, windows and lighting fixtures;
 - basic material variation, emissive window glass and room lighting;
+- runtime-synthesized low-frequency ambience, distant creaks and a proximity heartbeat layer (temporary audio implementation, not final recorded sound design);
 - flashlight, interactive exit door and first-pass monster patrol/hearing/line-of-sight pursuit;
 - main menu, settings screen and pause menu;
 - automated Windows x64 export workflow.
