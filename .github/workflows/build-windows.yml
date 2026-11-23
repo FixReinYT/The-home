@@ -9,10 +9,10 @@ on:
       - "**.tscn"
       - "**.tres"
       - "project.godot"
-      - "README.md"
-      - "docs/**"
       - "export_presets.cfg"
       - ".github/workflows/build-windows.yml"
+      - "README.md"
+      - "docs/**"
   workflow_dispatch:
 
 permissions:
@@ -22,24 +22,39 @@ jobs:
   export-windows:
     name: Export Windows x64
     runs-on: ubuntu-latest
-    container:
-      image: barichello/godot-ci:4.3
+    timeout-minutes: 20
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
+      - name: Install Godot 4.3 and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          GODOT_VERSION="4.3"
+          mkdir -p "$RUNNER_TEMP/godot" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          curl -fL "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          curl -fL "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz" -o "$RUNNER_TEMP/godot/templates.tpz"
+          unzip -q "$RUNNER_TEMP/godot/templates.tpz" -d "$RUNNER_TEMP/godot/templates"
+          cp -a "$RUNNER_TEMP/godot/templates/templates/." "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64" >> "$GITHUB_ENV"
+
       - name: Prepare build directory
         run: mkdir -p build
 
-      - name: Import project resources
-        run: godot --headless --editor --path . --quit
+      - name: Import and validate project scripts
+        run: '"$GODOT_BIN" --headless --editor --path . --quit'
 
       - name: Export Windows executable
-        run: godot --headless --path . --export-release "Windows Desktop" build/THE_HOUSE.exe
+        run: '"$GODOT_BIN" --headless --path . --export-release "Windows Desktop" build/THE_HOUSE.exe'
 
       - name: Package game
         run: |
-          test -f build/THE_HOUSE.exe
+          set -euo pipefail
+          test -s build/THE_HOUSE.exe
           cd build
           zip -r ../THE_HOUSE-Windows-x64.zip .
 
