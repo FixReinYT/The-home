@@ -91,10 +91,6 @@ func _shell_room(cx: float,cz: float,w: float,d: float,doors: Array[String]=[]) 
 	_box("Oak floor",Vector3(cx,0,cz),Vector3(w,0.22,d),mats["floor"])
 	_box("Ceiling",Vector3(cx,3.55,cz),Vector3(w,0.18,d),mats["plaster_dark"])
 	var t:=0.28
-	_wall(Vector3(cx-w/2,1.78,cz),Vector3(t,3.45,d))
-	_wall(Vector3(cx+w/2,1.78,cz),Vector3(t,3.45,d))
-	_wall(Vector3(cx,1.78,cz-d/2),Vector3(w,3.45,t))
-	_wall(Vector3(cx,1.78,cz+d/2),Vector3(w,3.45,t))
 	for x in [-w/2+0.2,w/2-0.2]:
 		_box("Crown moulding",Vector3(cx+x,3.35,cz),Vector3(0.12,0.16,d),mats["oak_light"],false)
 
@@ -142,7 +138,12 @@ func _build_shell() -> void:
 	_shell_room(9,-1,7,8)
 	_shell_room(-9,-5,7,8)
 	_shell_room(0,-9,12,8)
-	# Connectors / open doorways are intentionally left between room shells.
+	# Exterior perimeter. Interior rooms remain connected through broad door openings.
+	_wall(Vector3(-12.5,1.75,0),Vector3(0.28,3.4,27))
+	_wall(Vector3(12.5,1.75,0),Vector3(0.28,3.4,27))
+	_wall(Vector3(0,1.75,-13.5),Vector3(25.3,3.4,0.28))
+	_wall(Vector3(0,1.75,13.5),Vector3(25.3,3.4,0.28))
+	# Interior partitions guide sightlines but leave traversable openings.
 	_wall(Vector3(-6,1.75,8),Vector3(0.25,3.4,6.0))
 	_wall(Vector3(6,1.75,8),Vector3(0.25,3.4,6.0))
 	_wall(Vector3(-9,1.75,2),Vector3(7,3.4,0.25))
