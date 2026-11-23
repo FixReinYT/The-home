@@ -1,12 +1,12 @@
 # THE HOUSE — Development roadmap
 
-## Milestone 0 — Project foundation
-- [x] Create Godot project and main scene
-- [x] Add first-person movement and mouse look
-- [x] Add flashlight
-- [x] Add procedural greybox house and collision
-- [x] Add interactive door
-- [x] Add first-pass monster patrol/hearing/vision logic
+## Milestone 0 — Project foundation (code drafted; engine validation pending)
+- [ ] Create Godot project and main scene
+- [ ] Add first-person movement and mouse look
+- [ ] Add flashlight
+- [ ] Add procedural greybox house and collision
+- [ ] Add interactive door
+- [ ] Add first-pass monster patrol/hearing/vision logic
 - [ ] Run and validate in Godot 4.3+
 - [ ] Fix all parser/runtime errors found during validation
 
