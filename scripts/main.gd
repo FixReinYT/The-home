@@ -161,3 +161,62 @@ func _on_interaction_hint(message: String) -> void:
 func _on_player_noise(origin: Vector3, loudness: float) -> void:
 	if is_instance_valid(monster):
 		monster.call("hear_noise", origin, loudness)
+
+
+var pause_layer: CanvasLayer
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		if get_tree().paused:
+			_resume_game()
+		else:
+			_open_pause_menu()
+		get_viewport().set_input_as_handled()
+
+func _open_pause_menu() -> void:
+	if is_instance_valid(pause_layer):
+		return
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	get_tree().paused = true
+	pause_layer = CanvasLayer.new()
+	pause_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	pause_layer.layer = 30
+	add_child(pause_layer)
+	var shade := ColorRect.new()
+	shade.color = Color(0.0, 0.0, 0.0, 0.86)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pause_layer.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.add_child(center)
+	var panel := VBoxContainer.new()
+	panel.custom_minimum_size = Vector2(380, 0)
+	panel.add_theme_constant_override("separation", 12)
+	center.add_child(panel)
+	var title := Label.new()
+	title.text = "ПАУЗА"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 42)
+	panel.add_child(title)
+	_pause_button(panel, "ПРОДОЛЖИТЬ", _resume_game)
+	_pause_button(panel, "В ГЛАВНОЕ МЕНЮ", _return_to_menu)
+	_pause_button(panel, "ВЫХОД", func(): get_tree().quit())
+
+func _pause_button(parent: VBoxContainer, caption: String, action: Callable) -> void:
+	var button := Button.new()
+	button.text = caption
+	button.custom_minimum_size = Vector2(340, 46)
+	button.pressed.connect(action)
+	parent.add_child(button)
+
+func _resume_game() -> void:
+	get_tree().paused = false
+	if is_instance_valid(pause_layer):
+		pause_layer.queue_free()
+	pause_layer = null
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _return_to_menu() -> void:
+	get_tree().paused = false
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
