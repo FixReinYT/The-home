@@ -2,7 +2,7 @@
 
 A first-person psychological survival-horror project for Windows, built with Godot 4.
 
-## Current milestone: playable vertical-slice foundation
+## Current milestone: prototype foundation
 
 This repository currently contains the first code-driven prototype foundation:
 - first-person movement, mouse look, crouching and running;
