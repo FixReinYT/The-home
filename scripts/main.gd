@@ -3,6 +3,7 @@ extends Node3D
 const PlayerScript = preload("res://scripts/player.gd")
 const MonsterScript = preload("res://scripts/monster.gd")
 const DoorScript = preload("res://scripts/door.gd")
+const HouseBuilder = preload("res://scripts/house_builder.gd")
 
 var player: CharacterBody3D
 var monster: CharacterBody3D
@@ -39,38 +40,13 @@ func _build_environment() -> void:
 	add_child(moon)
 
 func _build_house() -> void:
-	var floor_mat := _material(Color(0.105, 0.092, 0.079), 0.92)
-	var wall_mat := _material(Color(0.19, 0.18, 0.16), 0.88)
-	var trim_mat := _material(Color(0.075, 0.063, 0.052), 0.8)
-	var furniture_mat := _material(Color(0.12, 0.075, 0.045), 0.72)
-
-	_make_box("Floor", Vector3(0, -0.2, 0), Vector3(18, 0.4, 24), floor_mat)
-	_make_box("Left wall", Vector3(-9, 2.5, 0), Vector3(0.35, 5, 24), wall_mat)
-	_make_box("Right wall", Vector3(9, 2.5, 0), Vector3(0.35, 5, 24), wall_mat)
-	_make_box("Front wall", Vector3(0, 2.5, 12), Vector3(18, 5, 0.35), wall_mat)
-	_make_box("Back wall left", Vector3(-6.2, 2.5, -12), Vector3(5.6, 5, 0.35), wall_mat)
-	_make_box("Back wall right", Vector3(6.2, 2.5, -12), Vector3(5.6, 5, 0.35), wall_mat)
-	_make_box("Back wall lintel", Vector3(0, 4.35, -12), Vector3(6.8, 1.3, 0.35), wall_mat)
-	_make_box("Ceiling", Vector3(0, 5.1, 0), Vector3(18, 0.25, 24), trim_mat)
-
-	_make_box("Partition A", Vector3(-3.5, 2.0, -4.2), Vector3(0.25, 4, 8.0), wall_mat)
-	_make_box("Partition B", Vector3(3.0, 2.0, 3.4), Vector3(0.25, 4, 7.0), wall_mat)
-	_make_box("Cross wall", Vector3(5.8, 2.0, -1.0), Vector3(6.0, 4, 0.25), wall_mat)
-
-	_make_box("Old cabinet", Vector3(-6.8, 1.0, 5.0), Vector3(1.5, 2.0, 0.8), furniture_mat)
-	_make_box("Dining table", Vector3(1.0, 0.85, 1.0), Vector3(2.8, 0.18, 1.4), furniture_mat)
-	for x in [-0.1, 2.1]:
-		for z in [0.55, 1.45]:
-			_make_box("Table leg", Vector3(x, 0.35, z), Vector3(0.14, 0.8, 0.14), trim_mat)
-	_make_box("Sideboard", Vector3(6.8, 0.8, -6.0), Vector3(1.2, 1.6, 2.0), furniture_mat)
-
-	_add_ceiling_light(Vector3(-5.5, 4.65, 5.5), 1.0)
-	_add_ceiling_light(Vector3(4.8, 4.65, -5.0), 0.65)
-
+	var builder = HouseBuilder.new()
+	builder.build(self)
 	var door := Node3D.new()
 	door.name = "ExitDoor"
 	door.set_script(DoorScript)
-	door.position = Vector3(0, 0, -11.78)
+	door.position = Vector3(0, 0, 12.75)
+	door.rotation.y = PI
 	add_child(door)
 
 func _add_ceiling_light(at: Vector3, energy: float) -> void:
