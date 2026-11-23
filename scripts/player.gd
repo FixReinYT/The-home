@@ -17,6 +17,7 @@ var noise_clock := 0.0
 var current_hint := ""
 
 func _ready() -> void:
+	_configure_input()
 	add_to_group("player")
 	var capsule := CapsuleShape3D.new()
 	capsule.radius = 0.34
@@ -100,7 +101,9 @@ func _physics_process(delta: float) -> void:
 func _interact() -> void:
 	ray.force_raycast_update()
 	if ray.is_colliding():
-		var target := ray.get_collider()
+		var target: Object = ray.get_collider()
+		if target and not target.has_method("interact"):
+			target = (target as Node).get_parent()
 		if target and target.has_method("interact"):
 			target.interact()
 
@@ -108,9 +111,28 @@ func _update_interaction_hint() -> void:
 	ray.force_raycast_update()
 	var next_hint := ""
 	if ray.is_colliding():
-		var target := ray.get_collider()
+		var target: Object = ray.get_collider()
+		if target and not target.has_method("get_interaction_text"):
+			target = (target as Node).get_parent()
 		if target and target.has_method("get_interaction_text"):
 			next_hint = target.get_interaction_text()
 	if next_hint != current_hint:
 		current_hint = next_hint
 		interaction_hint.emit(current_hint)
+
+func _configure_input() -> void:
+	_add_key_action("move_forward", KEY_W)
+	_add_key_action("move_back", KEY_S)
+	_add_key_action("move_left", KEY_A)
+	_add_key_action("move_right", KEY_D)
+	_add_key_action("run", KEY_SHIFT)
+	_add_key_action("crouch", KEY_CTRL)
+	_add_key_action("interact", KEY_E)
+	_add_key_action("flashlight", KEY_F)
+
+func _add_key_action(action_name: String, key_code: Key) -> void:
+	if not InputMap.has_action(action_name):
+		InputMap.add_action(action_name)
+	var event := InputEventKey.new()
+	event.physical_keycode = key_code
+	InputMap.action_add_event(action_name, event)
