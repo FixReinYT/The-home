@@ -15,6 +15,7 @@ func build(parent: Node3D) -> void:
 	mats["fabric"] = _mat(Color(0.19,0.055,0.045),0.98)
 	mats["dust"] = _mat(Color(0.23,0.22,0.19),1.0)
 	mats["glass"] = _emissive(Color(0.11,0.17,0.22),Color(0.12,0.2,0.28),0.45)
+	_build_ground_slab()
 	_build_shell()
 	_build_foyer()
 	_build_salon()
@@ -129,6 +130,10 @@ func _lamp(pos: Vector3,color: Color,energy: float,range_value: float) -> void:
 	light.omni_range=range_value
 	light.shadow_enabled=true
 	root.add_child(light)
+
+func _build_ground_slab() -> void:
+	# Continuous collision-backed foundation prevents gaps between room floor sections.
+	_box("Continuous foundation floor", Vector3(0,-0.18,0), Vector3(25.0,0.36,27.0), mats["floor"])
 
 func _build_shell() -> void:
 	# Ground-floor interconnected footprint: foyer, salon, dining room, kitchen, library and corridor.

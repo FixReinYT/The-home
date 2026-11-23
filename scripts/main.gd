@@ -111,7 +111,7 @@ func _spawn_player() -> void:
 	player = CharacterBody3D.new()
 	player.name = "Player"
 	player.set_script(PlayerScript)
-	player.position = Vector3(0, 0.15, 8.0)
+	player.position = Vector3(0, 0.25, 8.0)
 	add_child(player)
 	player.connect("interaction_hint", Callable(self, "_on_interaction_hint"))
 	player.connect("noise_emitted", Callable(self, "_on_player_noise"))
@@ -120,7 +120,7 @@ func _spawn_monster() -> void:
 	monster = CharacterBody3D.new()
 	monster.name = "ThePresence"
 	monster.set_script(MonsterScript)
-	monster.position = Vector3(1.0, 0.1, -5.5)
+	monster.position = Vector3(-9.0, 0.05, -7.0)
 	add_child(monster)
 	monster.call("set_hunt_target", player)
 
