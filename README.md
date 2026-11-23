@@ -2,29 +2,27 @@
 
 A first-person psychological survival-horror project for Windows, built with Godot 4.
 
-## Current milestone: prototype foundation
+## Current milestone: expanded environment prototype
 
-This repository currently contains the first code-driven prototype foundation:
+The current branch contains:
 - first-person movement, mouse look, crouching and running;
-- a procedural greybox house layout with collision;
-- a toggleable flashlight;
-- an interactive door;
-- a first-pass monster controller with patrol, hearing and line-of-sight pursuit;
-- a minimal in-game status HUD.
+- a procedural multi-room mansion layout with foyer, salon, dining room, kitchen, library and bedroom;
+- furnished environment props including sofa, dining set, kitchen counters, cabinets, bookcases, books, bed, windows and lighting fixtures;
+- basic material variation, emissive window glass and room lighting;
+- flashlight, interactive exit door and first-pass monster patrol/hearing/line-of-sight pursuit;
+- main menu, settings screen and pause menu;
+- automated Windows x64 export workflow.
 
-**Important:** this is an early gameplay prototype, not the finished realistic-art game. The current environment and creature are blockout/procedural placeholders. Production-quality models, PBR texture sets, authored animation, expanded house layout, narrative content, sound design, saving, difficulty balancing and Windows export still need to be built and tested.
+## Important visual-status disclosure
 
-## Requirements
-
-- Godot Engine 4.3 or newer (Compatibility renderer)
-- Windows, Linux or macOS for editor testing
+The mansion is currently assembled from procedural Godot meshes and primitive material resources. It is a larger, furnished blockout/art pass, **not photorealistic production art**. It does not yet contain authored high-poly asset packs, scanned PBR texture sets, a finished monster model/rig, animation library, authored soundscape or final narrative campaign. The current build must not be described as a finished 4–5 hour game.
 
 ## Run
 
 1. Download or clone this repository.
-2. Open the project folder in Godot 4.
+2. Open the project folder in Godot 4.3.
 3. Import the project when prompted.
-4. Press F5 to run the main scene.
+4. Press F5.
 
 ## Controls
 
@@ -36,14 +34,16 @@ This repository currently contains the first code-driven prototype foundation:
 | Ctrl | Crouch |
 | E | Interact |
 | F | Toggle flashlight |
-| Esc | Release mouse; click the game window to recapture |
+| Esc | Pause / release mouse |
+
+## Build
+
+GitHub Actions exports a Windows x64 executable and uploads a ZIP artifact. The exported game still requires testing on a real Windows installation.
 
 ## Project structure
 
 - scenes/ — Godot scenes
-- scripts/ — player, monster, door and world logic
+- scripts/ — player, monster, menu, world and environment builder
 - docs/ — design and development notes
 
-## Development status
-
-See docs/ROADMAP.md for milestone status and acceptance criteria.
+See docs/ROADMAP.md for remaining work and quality gates.
