@@ -8,6 +8,7 @@ var player: CharacterBody3D
 var monster: CharacterBody3D
 var status_label: Label
 var hint_label: Label
+var pause_layer: CanvasLayer
 
 func _ready() -> void:
 	_build_environment()
@@ -162,8 +163,6 @@ func _on_player_noise(origin: Vector3, loudness: float) -> void:
 	if is_instance_valid(monster):
 		monster.call("hear_noise", origin, loudness)
 
-
-var pause_layer: CanvasLayer
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
