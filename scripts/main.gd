@@ -4,12 +4,14 @@ const PlayerScript = preload("res://scripts/player.gd")
 const MonsterScript = preload("res://scripts/monster.gd")
 const DoorScript = preload("res://scripts/door.gd")
 const HouseBuilder = preload("res://scripts/house_builder.gd")
+const HorrorAudio = preload("res://scripts/horror_audio.gd")
 
 var player: CharacterBody3D
 var monster: CharacterBody3D
 var status_label: Label
 var hint_label: Label
 var pause_layer: CanvasLayer
+var horror_audio: Node
 
 func _ready() -> void:
 	_build_environment()
@@ -17,6 +19,9 @@ func _ready() -> void:
 	_build_hud()
 	_spawn_player()
 	_spawn_monster()
+	horror_audio = HorrorAudio.new()
+	horror_audio.name = "HorrorAudio"
+	add_child(horror_audio)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _build_environment() -> void:
@@ -127,6 +132,8 @@ func _spawn_monster() -> void:
 func _process(_delta: float) -> void:
 	if is_instance_valid(player) and is_instance_valid(monster):
 		var distance := player.global_position.distance_to(monster.global_position)
+		if is_instance_valid(horror_audio):
+			horror_audio.call("set_threat", distance, int(monster.get("state")) == 2)
 		status_label.text = "THE HOUSE  |  ФОНАРИК: %s  |  УГРОЗА: %s" % [
 			"ВКЛ" if bool(player.get("flashlight_on")) else "ВЫКЛ",
 			"РЯДОМ" if distance < 8.0 else "НЕИЗВЕСТНО"
