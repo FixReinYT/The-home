@@ -9,6 +9,8 @@ on:
       - "**.tscn"
       - "**.tres"
       - "project.godot"
+      - "README.md"
+      - "docs/**"
       - "export_presets.cfg"
       - ".github/workflows/build-windows.yml"
   workflow_dispatch:
