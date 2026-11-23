@@ -136,8 +136,8 @@ func _spawn_player() -> void:
 	player.set_script(PlayerScript)
 	player.position = Vector3(0, 0.15, 8.0)
 	add_child(player)
-	player.interaction_hint.connect(_on_interaction_hint)
-	player.noise_emitted.connect(_on_player_noise)
+	player.connect("interaction_hint", Callable(self, "_on_interaction_hint"))
+	player.connect("noise_emitted", Callable(self, "_on_player_noise"))
 
 func _spawn_monster() -> void:
 	monster = CharacterBody3D.new()
@@ -145,13 +145,13 @@ func _spawn_monster() -> void:
 	monster.set_script(MonsterScript)
 	monster.position = Vector3(1.0, 0.1, -5.5)
 	add_child(monster)
-	monster.set_hunt_target(player)
+	monster.call("set_hunt_target", player)
 
 func _process(_delta: float) -> void:
 	if is_instance_valid(player) and is_instance_valid(monster):
 		var distance := player.global_position.distance_to(monster.global_position)
 		status_label.text = "THE HOUSE  |  ФОНАРИК: %s  |  УГРОЗА: %s" % [
-			"ВКЛ" if player.flashlight_on else "ВЫКЛ",
+			"ВКЛ" if bool(player.get("flashlight_on")) else "ВЫКЛ",
 			"РЯДОМ" if distance < 8.0 else "НЕИЗВЕСТНО"
 		]
 
@@ -160,4 +160,4 @@ func _on_interaction_hint(message: String) -> void:
 
 func _on_player_noise(origin: Vector3, loudness: float) -> void:
 	if is_instance_valid(monster):
-		monster.hear_noise(origin, loudness)
+		monster.call("hear_noise", origin, loudness)
